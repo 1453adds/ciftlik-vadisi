@@ -351,7 +351,7 @@ const ITEMS = {
   domates: { ad: "Domates", fiyat: 18 }, biber: { ad: "Biber", fiyat: 20 }, cilek: { ad: "Çilek", fiyat: 28 }, salca: { ad: "Salça", fiyat: 150 }, cilekrecel: { ad: "Çilek reçeli", fiyat: 200 },
   atyemi: { ad: "At yemi", fiyat: 12 }, nal: { ad: "Nal", fiyat: 60 },
   tuy: { ad: "Tüy", fiyat: 35 },
-  gubre: { ad: "Gübre", fiyat: 15 }, kazyemi: { ad: "Kaz yemi", fiyat: 9 }, kazyumurtasi: { ad: "Kaz yumurtası", fiyat: 55 }, borek: { ad: "Börek", fiyat: 280 }, mandasutu: { ad: "Manda sütü", fiyat: 70 }, yastik: { ad: "Kuştüyü yastık", fiyat: 260 }, kaymak: { ad: "Kaymak", fiyat: 180 },
+  gubre: { ad: "Gübre", fiyat: 15 }, kazyemi: { ad: "Kaz yemi", fiyat: 9 }, kazyumurtasi: { ad: "Kaz yumurtası", fiyat: 55 }, kazkek: { ad: "Kaz yumurtalı kek", fiyat: 280 }, mandasutu: { ad: "Manda sütü", fiyat: 70 }, yastik: { ad: "Kuştüyü yastık", fiyat: 260 }, kaymak: { ad: "Kaymak", fiyat: 180 },
 };
 const ANIMALS = {
   tavuk: { ad: "Tavuk", fiyat: 20,  yem: "tavukyemi", urun: "yumurta",  sure: 300, xp: 2 },
@@ -391,7 +391,7 @@ const MACHINES = {
     { cikti: "pasta", girdi: { bugday: 2, yumurta: 2, sut: 1 }, adet: 1, sure: 300, lv: 4 },
     { cikti: "turta", girdi: { elma: 2, seker: 1, bugday: 2 }, adet: 1, sure: 375, lv: 5 },
     { cikti: "baklava", girdi: { bal: 1, bugday: 3, tereyagi: 1 }, adet: 1, sure: 450, lv: 6 },
-    { cikti: "borek", girdi: { bugday: 2, kazyumurtasi: 1, peynir: 1 }, adet: 1, sure: 480, lv: 6 }] },
+    { cikti: "kazkek", girdi: { bugday: 2, kazyumurtasi: 1, seker: 1 }, adet: 1, sure: 480, lv: 8 }] },
   kovan:    { ad: "Arı Kovanı", tur: "uretim", fiyat: 180, lv: 3, renk: "#f2b531", recipes: [
     { cikti: "bal", girdi: {}, adet: 1, sure: 900, lv: 3 }] },
   sekerf:   { ad: "Şeker Fabrikası", tur: "uretim", fiyat: 200, lv: 3, renk: "#b9a6d6", recipes: [
@@ -542,7 +542,27 @@ for (const o of S.objs) if (o.type === "machine") o.jobs = o.jobs.map(j => typeo
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
 const have = k => k === "gubre" ? (S.hiz ? S.hiz.gub : 0) : S.items[k] || 0;
 const give = (k, n) => { if (k === "gubre") { S.hiz.gub += n; return; } S.items[k] = have(k) + n; };
-function lvl() { let l = 1, x = S.xp; while (x >= l * 10) { x -= l * 10; l++; } return { l, x, need: l * 10 }; }
+const LV_NEED = [0, 6, 14, 24, 36, 50, 65, 80, 95, 110];
+const needOf = l => l < 10 ? LV_NEED[l] : l * 10 + 20;
+function lvl() { let l = 1, x = S.xp; while (x >= needOf(l)) { x -= needOf(l); l++; } return { l, x, need: needOf(l) }; }
+// ================= Seviye planı (1-10): her seviyede birkaç yeni şey açılır =================
+const LV_PLAN = {
+  crop: { bugday: 1, misir: 2, kamis: 3, soya: 4, havuc: 5 },
+  pen: { kumes: 1, ahir: 2, agil: 4, kecilik: 5, ordekhane: 6, kazgolu: 7, mandalik: 8, esekahir: 8, athara: 9 },
+  mak: { yemfab: 1, firin: 2, mandira: 3, sekerf: 3, kovan: 4, iplik: 5, recel: 5, balikci: 6, terzi: 6, sera: 7, salca: 8 },
+  tarif: { tavukyemi: 1, inekyemi: 2, koyunyemi: 4, keciyemi: 5, ordekyemi: 6, kazyemi: 7, mandayemi: 8, atyemi: 9,
+    ekmek: 2, kurabiye: 3, pasta: 4, turta: 5, baklava: 9, kazkek: 8, bal: 4, seker: 3, elmarecel: 5, kirazrecel: 7, cilekrecel: 9,
+    domates: 7, biber: 7, cilek: 8, salca: 8, tereyagi: 3, peynir: 3, kecipeyniri: 5, kaymak: 8, ip: 5,
+    hamsitava: 6, balikekmek: 6, alabalikizgara: 9, tisort: 6, kazak: 7, yastik: 7 },
+  agac: { elma: 4, kiraz: 7 },
+  sus: { fener: 2, bank: 2, korkuluk: 3, cicekbahce: 4, cesme: 6, degirmen: 10 },
+};
+for (const [k, l] of Object.entries(LV_PLAN.crop)) if (CROPS[k]) CROPS[k].lv = l;
+for (const [k, l] of Object.entries(LV_PLAN.pen)) if (PENS[k]) PENS[k].lv = l;
+for (const [k, l] of Object.entries(LV_PLAN.mak)) if (MACHINES[k]) MACHINES[k].lv = l;
+for (const m of Object.values(MACHINES)) for (const r of m.recipes) if (LV_PLAN.tarif[r.cikti]) r.lv = Math.max(m.lv, LV_PLAN.tarif[r.cikti]);
+for (const [k, l] of Object.entries(LV_PLAN.agac)) if (FRUITS[k]) FRUITS[k].lv = l;
+for (const [k, l] of Object.entries(LV_PLAN.sus)) if (DECOR[k]) DECOR[k].lv = l;
 
 // ================= Çizim yardımcıları =================
 const cv = document.getElementById("cv");
@@ -2151,7 +2171,7 @@ function addXp(n) {
   if (after > before) {
     const un = [...Object.values(CROPS).filter(x => x.lv === after).map(x => x.ad), ...Object.values(PENS).filter(x => x.lv === after).map(x => x.ad), ...Object.values(MACHINES).filter(x => x.lv === after).map(x => x.ad), ...Object.values(FRUITS).filter(x => x.lv === after).map(x => x.ad), ...Object.values(MACHINES).flatMap(m => m.recipes).filter(x => x.lv === after && x.lv > 1).map(x => ITEMS[x.cikti].ad)];
     toast(`Seviye ${after}!` + (un.length ? " Açıldı: " + un.join(", ") : ""), true);
-    sfx("level"); celebrate(); bumpEl("lvlPill"); S.gems += 3; if (S.hiz) S.hiz.gub += 2; setTimeout(() => bumpEl("gemPill"), 400);
+    sfx("level"); celebrate(); bumpEl("lvlPill"); S.gems += 3; if (after <= 10) S.coins += after * 25; if (S.hiz) S.hiz.gub += 2; setTimeout(() => bumpEl("gemPill"), 400);
   }
 }
 function commit() { save(); if (window.SOCIAL_ON) pushFarm(); refreshHud(); if (sheetTag === "pazar") { refreshMarket(); refreshHud(); return; } if (sheetRender) sheetRender(); }
@@ -2208,8 +2228,8 @@ function openBuild() {
     section("Hayvan evleri", Object.entries(PENS).map(([k, d]) => ({ ad: d.ad, lv: d.lv, fiyat: d.fiyat, alt: `${ANIMALS[d.hayvan].ad} · 2×2 kare`, proto: { type: "pen", kind: k, w: 2, h: 2, animals: [] } })));
     section("Yem", Object.entries(MACHINES).filter(([, d]) => d.tur === "yem").map(([k, d]) => ({ ad: d.ad, lv: d.lv, fiyat: d.fiyat, alt: "Tüm hayvanların yemini yapar", proto: { type: "machine", kind: k, w: 1, h: 1, jobs: [] } })));
     section("Meyve ağaçları", Object.entries(FRUITS).map(([k, d]) => ({ ad: d.ad, lv: d.lv, fiyat: d.fiyat, alt: `${fmtDur(d.sure)}'da 2 ${ITEMS[d.urun].ad.toLowerCase()}`, proto: { type: "orchard", kind: k, w: 1, h: 1, t: 0 } })));
-    if (!S.objs.some(o => o.type === "maden")) section("Maden", [{ ad: "Maden", lv: 3, fiyat: 600, alt: "Çivi, tahta, vida ve değerli taş çıkar", proto: { type: "maden", kind: "maden", w: 1, h: 1 } }]);
-    if (!S.objs.some(o => o.type === "garaj")) section("Garaj", [{ ad: "Garaj", lv: 4, fiyat: 1000, alt: "Traktör ve yardımcı çiftçi · 2×2 kare", proto: { type: "garaj", kind: "garaj", w: 2, h: 2 } }]);
+    if (!S.objs.some(o => o.type === "maden")) section("Maden", [{ ad: "Maden", lv: 4, fiyat: 600, alt: "Çivi, tahta, vida ve değerli taş çıkar", proto: { type: "maden", kind: "maden", w: 1, h: 1 } }]);
+    if (!S.objs.some(o => o.type === "garaj")) section("Garaj", [{ ad: "Garaj", lv: 5, fiyat: 1000, alt: "Traktör ve yardımcı çiftçi · 2×2 kare", proto: { type: "garaj", kind: "garaj", w: 2, h: 2 } }]);
     if (!S.objs.some(o => o.type === "kuyu")) section("Su kuyusu", [{ ad: "Su kuyusu", lv: 2, fiyat: 250, alt: "Tarlaları sula, %30 hızlı büyüsün", proto: { type: "kuyu", kind: "kuyu", w: 1, h: 1 } }]);
     if (!S.objs.some(o => o.type === "liman")) section("Liman", [{ ad: "Liman", lv: GEMI_LV, fiyat: 800, alt: "Gemi siparişleri · 2×2 kare", proto: { type: "liman", kind: "liman", w: 2, h: 2 } }]);
     section("Evcil hayvanlar", Object.entries(PETS).map(([k, d]) => ({ ad: d.ad, lv: d.lv, fiyat: d.fiyat, elmas: d.elmas, alt: d.alt, proto: { type: "pet", kind: k, w: 1, h: 1, t: 0 } })));
@@ -3715,12 +3735,12 @@ Object.assign(ITEMS, {
   omlet: { ad: "Omlet", fiyat: 210 }, sutlac: { ad: "Sütlaç", fiyat: 190 }, balikcorbasi: { ad: "Balık çorbası", fiyat: 200 },
   borek: { ad: "Peynirli börek", fiyat: 330 }, kunefe: { ad: "Künefe", fiyat: 520 },
 });
-MACHINES.mutfak = { ad: "Mutfak", tur: "uretim", fiyat: 600, lv: 6, renk: "#e07b39", recipes: [
-  { cikti: "omlet", girdi: { yumurta: 3, tereyagi: 1 }, adet: 1, sure: 50, lv: 6 },
-  { cikti: "sutlac", girdi: { sut: 2, seker: 1, bugday: 1 }, adet: 1, sure: 60, lv: 6 },
-  { cikti: "balikcorbasi", girdi: { levrek: 1, havuc: 2 }, adet: 1, sure: 70, lv: 7 },
-  { cikti: "borek", girdi: { bugday: 3, peynir: 1, yumurta: 1 }, adet: 1, sure: 80, lv: 7 },
-  { cikti: "kunefe", girdi: { kaymak: 1, bal: 1, ekmek: 1 }, adet: 1, sure: 90, lv: 8 }] };
+MACHINES.mutfak = { ad: "Mutfak", tur: "uretim", fiyat: 600, lv: 7, renk: "#e07b39", recipes: [
+  { cikti: "omlet", girdi: { yumurta: 3, tereyagi: 1 }, adet: 1, sure: 250, lv: 7 },
+  { cikti: "sutlac", girdi: { sut: 2, seker: 1, bugday: 1 }, adet: 1, sure: 300, lv: 7 },
+  { cikti: "balikcorbasi", girdi: { levrek: 1, havuc: 2 }, adet: 1, sure: 350, lv: 8 },
+  { cikti: "borek", girdi: { bugday: 3, peynir: 1, yumurta: 1 }, adet: 1, sure: 400, lv: 9 },
+  { cikti: "kunefe", girdi: { kaymak: 1, bal: 1, ekmek: 1 }, adet: 1, sure: 450, lv: 10 }] };
 DECOR.kupa = { ad: "Sezon kupası", ozel: true, fiyat: 0, lv: 1, xp: 5, alt: "Altın Pas ödülü" };
 
 const cloud = (x, y, s, col) => { circ(x - s * .18, y, s * .16, col); circ(x + s * .02, y - s * .1, s * .21, col); circ(x + s * .22, y, s * .15, col); g.fillStyle = col; g.fillRect(x - s * .18, y - s * .02, s * .4, s * .17); };
@@ -4064,7 +4084,7 @@ function openPet(o) {
 }
 
 // ================= Liman ve gemi =================
-const GEMI_LV = 5, GEMI_WAIT = 600000;
+const GEMI_LV = 6, GEMI_WAIT = 600000;
 let gemiSail = 0;
 function genGemi() {
   const pool = availableItems().filter(([k]) => !MATS.includes(k)), kasa = [];
@@ -5377,7 +5397,7 @@ function drawBahce(c, r, t) {
   for (let i = 0; i < 2; i++) { const a = t * (1.6 + i * .5) + i * 3, bx = bp.x + Math.cos(a) * 18, by = bp.y + Math.sin(a * 2) * 6; ell(bx, by, 3, 2.2, "#ffcc1a"); line({ x: bx - 1, y: by - 2 }, { x: bx - 1, y: by + 2 }, "#3a2a10", 1); ell(bx - 1, by - 3, 2.2, 1.4, "rgba(255,255,255,.8)"); }
 }
 ICON2.kazyumurtasi = (x, y, s) => { ell(x, y + s * .04, s * .26, s * .34, "#fbf6e8"); g.strokeStyle = "#d8ccb0"; g.lineWidth = s * .03; g.stroke(); ell(x - s * .08, y - s * .1, s * .07, s * .1, "rgba(255,255,255,.9)"); };
-ICON2.borek = (x, y, s) => {
+ICON2.kazkek = (x, y, s) => {
   ell(x, y + s * .18, s * .42, s * .14, "#e9e2d2");
   for (let i = 0; i < 3; i++) { const yy = y + s * (.1 - i * .14); ell(x, yy, s * (.36 - i * .05), s * .12, i % 2 ? "#e8a948" : "#d98f2e"); g.strokeStyle = "#a8641a"; g.lineWidth = s * .02; g.stroke(); }
   for (let i = 0; i < 5; i++) circ(x - s * .16 + i * s * .08, y - s * .2 + (i % 2) * s * .03, s * .018, "#3a2a1a");
