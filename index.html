@@ -350,7 +350,8 @@ const ITEMS = {
   tavukyemi: { ad: "Tavuk yemi", fiyat: 2 }, inekyemi: { ad: "İnek yemi", fiyat: 5 }, koyunyemi: { ad: "Koyun yemi", fiyat: 7 }, keciyemi: { ad: "Keçi yemi", fiyat: 10 }, ordekyemi: { ad: "Ördek yemi", fiyat: 8 }, mandayemi: { ad: "Manda yemi", fiyat: 14 },
   domates: { ad: "Domates", fiyat: 18 }, biber: { ad: "Biber", fiyat: 20 }, cilek: { ad: "Çilek", fiyat: 28 }, salca: { ad: "Salça", fiyat: 150 }, cilekrecel: { ad: "Çilek reçeli", fiyat: 200 },
   atyemi: { ad: "At yemi", fiyat: 12 }, nal: { ad: "Nal", fiyat: 60 },
-  tuy: { ad: "Tüy", fiyat: 35 }, mandasutu: { ad: "Manda sütü", fiyat: 70 }, yastik: { ad: "Kuştüyü yastık", fiyat: 260 }, kaymak: { ad: "Kaymak", fiyat: 180 },
+  tuy: { ad: "Tüy", fiyat: 35 },
+  gubre: { ad: "Gübre", fiyat: 15 }, kazyemi: { ad: "Kaz yemi", fiyat: 9 }, kazyumurtasi: { ad: "Kaz yumurtası", fiyat: 55 }, borek: { ad: "Börek", fiyat: 280 }, mandasutu: { ad: "Manda sütü", fiyat: 70 }, yastik: { ad: "Kuştüyü yastık", fiyat: 260 }, kaymak: { ad: "Kaymak", fiyat: 180 },
 };
 const ANIMALS = {
   tavuk: { ad: "Tavuk", fiyat: 20,  yem: "tavukyemi", urun: "yumurta",  sure: 300, xp: 2 },
@@ -360,6 +361,8 @@ const ANIMALS = {
   ordek: { ad: "Ördek", fiyat: 120, yem: "ordekyemi", urun: "tuy",      sure: 1200, xp: 5 },
   manda: { ad: "Manda", fiyat: 250, yem: "mandayemi", urun: "mandasutu", sure: 1800, xp: 8 },
   at:    { ad: "At",    fiyat: 400, yem: "atyemi",   urun: "nal",      sure: 2400, xp: 10 },
+  kaz:   { ad: "Kaz",   fiyat: 180, yem: "kazyemi",  urun: "kazyumurtasi", sure: 1200, xp: 6 },
+  esek:  { ad: "Eşek",  fiyat: 300, yem: "havuc",    urun: "gubre",    sure: 1500, xp: 7 },
 };
 const PENS = {
   kumes:   { ad: "Kümes",      hayvan: "tavuk", fiyat: 60,  lv: 1, cap: 4, zemin: "#e6cd83", cit: "#a8743f" },
@@ -369,6 +372,8 @@ const PENS = {
   ordekhane: { ad: "Ördek göleti", hayvan: "ordek", fiyat: 600, lv: 5, cap: 4, zemin: "#b9dfa0", cit: "#a8743f" },
   mandalik:  { ad: "Manda ahırı", hayvan: "manda", fiyat: 900, lv: 7, cap: 3, zemin: "#a98a60", cit: "#5b4636" },
   athara:    { ad: "At çiftliği", hayvan: "at", fiyat: 1500, lv: 8, cap: 3, zemin: "#c9b27a", cit: "#f4efe4" },
+  kazgolu:   { ad: "Kaz göleti", hayvan: "kaz", fiyat: 800, lv: 6, cap: 4, zemin: "#a9d98f", cit: "#8b5e34" },
+  esekahir:  { ad: "Eşek ahırı", hayvan: "esek", fiyat: 1100, lv: 6, cap: 3, zemin: "#c8b48a", cit: "#7a5230" },
 };
 const MACHINES = {
   yemfab: { ad: "Yem Fabrikası", tur: "yem", fiyat: 40, lv: 1, renk: "#e0a33a", recipes: [
@@ -378,13 +383,15 @@ const MACHINES = {
     { cikti: "keciyemi", girdi: { havuc: 2, misir: 1 }, adet: 3, sure: 140, lv: 4 },
     { cikti: "ordekyemi", girdi: { soya: 1, bugday: 2 }, adet: 3, sure: 120, lv: 5 },
     { cikti: "mandayemi", girdi: { misir: 2, havuc: 1 }, adet: 3, sure: 160, lv: 7 },
-    { cikti: "atyemi", girdi: { havuc: 2, misir: 1, bugday: 1 }, adet: 3, sure: 180, lv: 8 }] },
+    { cikti: "atyemi", girdi: { havuc: 2, misir: 1, bugday: 1 }, adet: 3, sure: 180, lv: 8 },
+    { cikti: "kazyemi", girdi: { soya: 1, misir: 1 }, adet: 3, sure: 120, lv: 6 }] },
   firin:    { ad: "Fırın", tur: "uretim", fiyat: 120, lv: 2, renk: "#c8643b", recipes: [
     { cikti: "ekmek", girdi: { bugday: 3 }, adet: 1, sure: 150, lv: 2 },
     { cikti: "kurabiye", girdi: { bugday: 2, yumurta: 2 }, adet: 1, sure: 225, lv: 3 },
     { cikti: "pasta", girdi: { bugday: 2, yumurta: 2, sut: 1 }, adet: 1, sure: 300, lv: 4 },
     { cikti: "turta", girdi: { elma: 2, seker: 1, bugday: 2 }, adet: 1, sure: 375, lv: 5 },
-    { cikti: "baklava", girdi: { bal: 1, bugday: 3, tereyagi: 1 }, adet: 1, sure: 450, lv: 6 }] },
+    { cikti: "baklava", girdi: { bal: 1, bugday: 3, tereyagi: 1 }, adet: 1, sure: 450, lv: 6 },
+    { cikti: "borek", girdi: { bugday: 2, kazyumurtasi: 1, peynir: 1 }, adet: 1, sure: 480, lv: 6 }] },
   kovan:    { ad: "Arı Kovanı", tur: "uretim", fiyat: 180, lv: 3, renk: "#f2b531", recipes: [
     { cikti: "bal", girdi: {}, adet: 1, sure: 900, lv: 3 }] },
   sekerf:   { ad: "Şeker Fabrikası", tur: "uretim", fiyat: 200, lv: 3, renk: "#b9a6d6", recipes: [
@@ -422,6 +429,7 @@ const FRUITS = {
 const DECOR = {
   cit:      { ad: "Çit", fiyat: 8, lv: 1, xp: 0, alt: "Yan yana koyunca birleşir" },
   ciceklik: { ad: "Çiçeklik", fiyat: 25, lv: 1, xp: 1, alt: "Renkli çiçekler" },
+  cicekbahce: { ad: "Çiçek bahçesi", fiyat: 300, lv: 3, xp: 3, alt: "Arılar sever: her biri kovanı %10 hızlandırır (en çok 3)" },
   fener:    { ad: "Fener", fiyat: 40, lv: 2, xp: 1, alt: "Gece ışık verir" },
   bank:     { ad: "Bank", fiyat: 60, lv: 2, xp: 1, alt: "Dinlenme köşesi" },
   korkuluk: { ad: "Korkuluk", fiyat: 50, lv: 3, xp: 1, alt: "Tarlanın bekçisi" },
@@ -434,7 +442,7 @@ const DECOR = {
   heykel:   { ad: "Altın inek heykeli", fiyat: 40, elmas: true, lv: 1, xp: 5, alt: "Özel süs, parıldar" },
   gokkusagi:{ ad: "Gökkuşağı çiçekleri", fiyat: 15, elmas: true, lv: 1, xp: 2, alt: "Özel süs, renk değiştirir" },
 };
-const FEED_COL = { tavukyemi: "#f2c84b", inekyemi: "#6fbf4f", koyunyemi: "#5a9de0", keciyemi: "#b07fd6", ordekyemi: "#4fb3a6", mandayemi: "#8a6a4a", atyemi: "#c0703a" };
+const FEED_COL = { tavukyemi: "#f2c84b", inekyemi: "#6fbf4f", koyunyemi: "#5a9de0", keciyemi: "#b07fd6", ordekyemi: "#4fb3a6", mandayemi: "#8a6a4a", atyemi: "#c0703a", kazyemi: "#e6e0c8" };
 const OBST = [
   { id: "o1", kind: "tas", c: 11, r: 10 }, { id: "o2", kind: "cali", c: 12, r: 12 }, { id: "o3", kind: "cali", c: 4, r: 12 },
   { id: "o4", kind: "tas", c: 13, r: 7 }, { id: "o5", kind: "kutuk", c: 6, r: 13 }, { id: "o6", kind: "cali", c: 10, r: 6 },
@@ -532,8 +540,8 @@ if (!S.set.mevsim) S.set.mevsim = "oto";
 if (!S.shop) S.shop = { starter: false, kart: 0, kartDay: "", adDay: "", ads: 0 };
 for (const o of S.objs) if (o.type === "machine") o.jobs = o.jobs.map(j => typeof j === "number" ? { end: j, k: 0 } : j);
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
-const have = k => S.items[k] || 0;
-const give = (k, n) => { S.items[k] = have(k) + n; };
+const have = k => k === "gubre" ? (S.hiz ? S.hiz.gub : 0) : S.items[k] || 0;
+const give = (k, n) => { if (k === "gubre") { S.hiz.gub += n; return; } S.items[k] = have(k) + n; };
 function lvl() { let l = 1, x = S.xp; while (x >= l * 10) { x -= l * 10; l++; } return { l, x, need: l * 10 }; }
 
 // ================= Çizim yardımcıları =================
@@ -1188,6 +1196,7 @@ function drawDecor(o, t, preview) {
     post(p); return;
   }
   ell(p.x, p.y + 3, 30, 12, "rgba(20,40,10,.18)");
+  if (k === "cicekbahce") { drawBahce(c, r, t); return; }
   if (k === "ciceklik") {
     const b = box(c + .2, r + .2, .6, .6, 14, "#a8743f");
     const top = [P(c + .25, r + .25), P(c + .75, r + .25), P(c + .75, r + .75), P(c + .25, r + .75)].map(q => up(q, 14));
@@ -2410,8 +2419,8 @@ function openMachine(o) {
 const MATS = ["civi", "tahta", "vida"];
 const isCrop = k => !!CROPS[k];
 const siloUsed = () => Object.keys(CROPS).reduce((n, k) => n + have(k), 0);
-const ambarUsed = () => Object.keys(ITEMS).filter(k => !isCrop(k)).reduce((n, k) => n + have(k), 0);
-const space = k => isCrop(k) ? capOf("silo") - siloUsed() : capOf("ambar") - ambarUsed();
+const ambarUsed = () => Object.keys(ITEMS).filter(k => !isCrop(k) && k !== "gubre").reduce((n, k) => n + have(k), 0);
+const space = k => k === "gubre" ? 999 : isCrop(k) ? capOf("silo") - siloUsed() : capOf("ambar") - ambarUsed();
 const fullMsg = k => sfx("error") || toast(isCrop(k) ? "Silo dolu! Ürün sat ya da siloyu genişlet." : "Ambar dolu! Ürün sat ya da ambarı genişlet.");
 const upgradeNeed = which => 1 + Math.round((S.cap[which] - 50) / 25);
 function maybeDrop(x, y) {
@@ -2424,7 +2433,7 @@ function maybeDrop(x, y) {
 function availableItems() {
   const L = lvl().l, out = [];
   for (const [k, c] of Object.entries(CROPS)) if (c.lv <= L) out.push([k, 2, 6]);
-  const animalLv = { yumurta: 1, sut: PENS.ahir.lv, yun: PENS.agil.lv, kecisutu: PENS.kecilik.lv, tuy: PENS.ordekhane.lv, mandasutu: PENS.mandalik.lv, hamsi: 3, levrek: 4 };
+  const animalLv = { yumurta: 1, sut: PENS.ahir.lv, yun: PENS.agil.lv, kecisutu: PENS.kecilik.lv, tuy: PENS.ordekhane.lv, mandasutu: PENS.mandalik.lv, kazyumurtasi: PENS.kazgolu.lv, hamsi: 3, levrek: 4 };
   for (const [k, l] of Object.entries(animalLv)) if (l <= L) out.push([k, 1, 3]);
   for (const f of Object.values(FRUITS)) if (f.lv <= L) out.push([f.urun, 2, 4]);
   for (const m of Object.values(MACHINES)) if (m.tur === "uretim" && m.lv <= L) for (const r of m.recipes) if (r.lv <= L) out.push([r.cikti, 1, 2]);
@@ -2506,7 +2515,7 @@ const TASK_TXT = { hasat: "Hasat et", urun: "Hayvanlardan topla", uret: "Üret",
 function newDaily() {
   const L = lvl().l, R = Math.random;
   const crops = Object.entries(CROPS).filter(([, c]) => c.lv <= L).map(([k]) => k);
-  const animalLv = { yumurta: 1, sut: PENS.ahir.lv, yun: PENS.agil.lv, kecisutu: PENS.kecilik.lv, tuy: PENS.ordekhane.lv, mandasutu: PENS.mandalik.lv, hamsi: 3, levrek: 4 };
+  const animalLv = { yumurta: 1, sut: PENS.ahir.lv, yun: PENS.agil.lv, kecisutu: PENS.kecilik.lv, tuy: PENS.ordekhane.lv, mandasutu: PENS.mandalik.lv, kazyumurtasi: PENS.kazgolu.lv, hamsi: 3, levrek: 4 };
   const prods = Object.entries(animalLv).filter(([, l]) => l <= L).map(([k]) => k);
   const outs = Object.values(MACHINES).filter(m => m.lv <= L).flatMap(m => m.recipes.filter(r => r.lv <= L).map(r => r.cikti));
   const pick = a => a[Math.floor(R() * a.length)];
@@ -3483,7 +3492,8 @@ function openFishing() {
 
 // ================= Bina yükseltme =================
 const SPEED = [1, 1, .8, .65];
-const speedOf = o => SPEED[o.lv || 1];
+const bahceSay = () => Math.min(3, S.objs.filter(x => x.type === "decor" && x.kind === "cicekbahce").length);
+const speedOf = o => SPEED[o.lv || 1] * (o.kind === "kovan" ? 1 - .1 * bahceSay() : 1);
 const penCap = o => PENS[o.kind].cap + ((o.lv || 1) - 1);
 function upgradeCost(o, base) { const l = o.lv || 1; return { coins: Math.round(base * (l === 1 ? 1.5 : 3)), mats: l * 2, lv: l === 1 ? 4 : 7 }; }
 function upgradeBox(body, o, base, effect) {
@@ -4698,6 +4708,7 @@ function penCollect(o, auto) {
   let ex = 0;
   if (got && albumDone(1)) { for (let i = 0; i < got; i++) if (Math.random() < .15) ex++; if (space(A.urun) >= got + sev + ex) give(A.urun, ex); else ex = 0; }
   if (got) { give(A.urun, got + sev); addXp(got * A.xp); track("urun", A.urun, got + sev); }
+  if (got && A.urun === "kazyumurtasi") { let ay = 0; for (let i = 0; i < got; i++) if (Math.random() < .05) ay++; if (ay) { S.gems += 5 * ay; bumpEl("gemPill"); setTimeout(() => { celebrate(); toast(`Altın yumurta! Kazın ${5 * ay} elmas verdi.`, true); }, 600); } }
   if (got || fed) tutEvent("hayvan");
   if (got) evDrop(.35, 1, o.c + .5, o.r + .5);
   const p = P(o.c + 1, o.r + 1);
@@ -5168,7 +5179,7 @@ function PET_TAK(tak, hx, hy, hr, nx, ny) {
 const SPR = {};
 for (const [k, [w, h, src]] of Object.entries(SPR_DATA)) { const im = new Image(); im.decoding = "async"; im.src = src; SPR[k] = { im, w, h }; }
 const sprOk = k => !!SPR[k] && SPR[k].im.complete && SPR[k].im.naturalWidth > 0;
-const SPR_H = { tavuk: 29, ordek: 29, koyun: 35, keci: 38, inek: 43, manda: 46, at: 52, kopek: 34, kedi: 28, tavsan: 26, civciv: 19 };
+const SPR_H = { kaz: 32, esek: 40, tavuk: 29, ordek: 29, koyun: 35, keci: 38, inek: 43, manda: 46, at: 52, kopek: 34, kedi: 28, tavsan: 26, civciv: 19 };
 // bacak çizgisi (yükseklik oranı), ön/arka bacak ayrımı (genişlik oranı), salınım
 const LEGS = { inek: [.72, .47, .34], manda: [.74, .47, .34], koyun0: [.72, .46, .36], koyun1: [.72, .46, .36], koyun2: [.74, .46, .36], keci: [.72, .45, .36], at: [.64, .42, .4], kopek: [.7, .5, .36], kedi: [.74, .5, .36], tavuk: [.82, .5, .45], ordek: [.83, .6, .45], civciv: [.86, .57, .45], kaz: [.83, .6, .45], esek: [.66, .45, .38] };
 const BIRD = { tavuk: 1, ordek: 1, civciv: 1, kaz: 1 };
@@ -5320,8 +5331,57 @@ function drawShelter(kind, c, r) {
     for (const [a0, a1] of [[.22, .52], [.62, .92]]) { const q = quadL(c + a0, c + a1, r + .74, 0, 13), q2 = quadL(c + a0, c + a1, r + .74, 15, 26); poly(q, "#7a4424", "#f4efe4", 2); line(q[0], q[2], "#f4efe4", 1.6); line(q[1], q[3], "#f4efe4", 1.6); poly(q2, "#2a1608", "#f4efe4", 2); }
     hayBale(P(c + 1.3, r + .35).x, P(c + 1.3, r + .35).y, 8); hayBale(P(c + 1.3, r + .35).x + 9, P(c + 1.3, r + .35).y - 8, 7);
     trough(c + 1.35, r + .95, "#c0703a");
+  } else if (kind === "kazgolu") {
+    const pc = P(c + 1.2, r + 1.15);
+    ell(pc.x, pc.y + 3, 56, 24, "#8a7a52"); ell(pc.x, pc.y, 54, 22, "#3f9bc8"); ell(pc.x - 8, pc.y - 4, 40, 14, "#6fbde0"); ell(pc.x - 18, pc.y - 7, 12, 3, "rgba(255,255,255,.35)");
+    for (const [dx, dy, rr] of [[-44, 6, 7], [40, -2, 6], [-30, 14, 5], [30, 14, 8]]) { ell(pc.x + dx, pc.y + dy, rr, rr * .55, "#a39c90"); ell(pc.x + dx - 1, pc.y + dy - 1, rr * .7, rr * .35, "#c9c2b5"); }
+    for (const [dx, dy] of [[-20, 8], [16, -8]]) { ell(pc.x + dx, pc.y + dy, 7, 2.8, "#5fae3a"); circ(pc.x + dx + 3, pc.y + dy - 1, 1.8, "#ffffff"); }
+    for (let i = 0; i < 6; i++) { const x = pc.x - 58 + i * 3, y = pc.y - 2 + (i % 2) * 3; line({ x, y }, { x: x - 1, y: y - 15 - (i % 3) * 3 }, "#4f8a2c", 1.6); if (i % 2) ell(x - 1, y - 16, 1.6, 4.5, "#7a4a2a"); }
+    for (const [a, b2] of [[.2, .72], [.7, .72], [.7, .2]]) { const q = P(c + a, r + b2); line(q, up(q, 6), "#5b3a1e", 3); }
+    const b = rwalls(c + .18, r + .18, .55, .52, 5, 18, "#f4ecd8");
+    linesL(c + .18, c + .73, r + .7, 5, 23, 4, "rgba(120,90,50,.18)");
+    for (const q of [b.w, b.s, b.e]) line(q, up(q, 18), "#ffffff", 1.6);
+    roof(b, 15, "#3c7a46", "#f4ecd8", 6);
+    const d = onLeft(c + .46, r + .7, 11); g.beginPath(); g.ellipse(d.x, d.y, 4, 5, 0, 0, 7); g.fillStyle = "#3a1d10"; g.fill(); g.strokeStyle = "#ffffff"; g.lineWidth = 1.4; g.stroke();
+    const r0 = onLeft(c + .46, r + .7, 5), r1 = P(c + .56, r + 1.08); poly([{ x: r0.x - 4, y: r0.y }, { x: r0.x + 4, y: r0.y }, { x: r1.x + 4, y: r1.y }, { x: r1.x - 4, y: r1.y }], "#a8743f", "#6b4423", 1);
+    const nb = P(c + 1.35, r + .3); ell(nb.x, nb.y, 12, 5, "#e3c25e"); drawIcon("kazyumurtasi", nb.x, nb.y - 4, 12);
+  } else if (kind === "esekahir") {
+    const b = walls(c + .1, r + .1, .9, .7, 30, "#c9a46c");
+    linesL(c + .1, c + 1, r + .8, 0, 30, 4.5, "rgba(90,55,20,.22)"); linesR(c + 1, r + .1, r + .8, 0, 30, 4.5, "rgba(70,40,15,.22)");
+    stonesL(c + .1, c + 1, r + .8, 0, 9, "#a89a80");
+    const q = quadL(c + .32, c + .74, r + .8, 0, 22); poly(q, "#4a2e18", "#7a5230", 2.4);
+    const q2 = quadL(c + .32, c + .74, r + .8, 0, 11); poly(q2, "#8a5a32", "#7a5230", 2); line(q2[0], q2[2], "#5b3a1e", 1.6); line(q2[1], q2[3], "#5b3a1e", 1.6);
+    roof(b, 18, "#8f4a2a", "#c9a46c", 7);
+    // arabacık
+    const ca = P(c + 1.3, r + .4); rrect(ca.x - 13, ca.y - 15, 26, 10, 2); g.fillStyle = "#b07a42"; g.fill(); g.strokeStyle = "#6b4423"; g.lineWidth = 1.4; g.stroke();
+    line({ x: ca.x - 13, y: ca.y - 10 }, { x: ca.x - 24, y: ca.y - 4 }, "#6b4423", 2);
+    for (const dx of [-8, 8]) { circ(ca.x + dx, ca.y - 4, 5.2, "#5b3a1e"); circ(ca.x + dx, ca.y - 4, 3.6, "#c9925a"); circ(ca.x + dx, ca.y - 4, 1.2, "#5b3a1e"); }
+    for (let i = 0; i < 4; i++) ell(ca.x - 8 + i * 5, ca.y - 16, 3.4, 2.6, i % 2 ? "#ff8c2a" : "#f07a1a");
+    hayBale(P(c + .5, r + 1.25).x - 30, P(c + .5, r + 1.25).y, 7);
+    trough(c + 1.35, r + .95, "#ff8c2a");
   }
 }
+function drawBahce(c, r, t) {
+  const pts = [P(c + .06, r + .06), P(c + .94, r + .06), P(c + .94, r + .94), P(c + .06, r + .94)];
+  poly(pts.map(q => up(q, 0)), "#7a5230"); poly(pts.map(q => up(q, 4)), "#8f5f36");
+  poly([P(c + .12, r + .12), P(c + .88, r + .12), P(c + .88, r + .88), P(c + .12, r + .88)].map(q => up(q, 4)), "#5d3c1f");
+  const cols = ["#ff5a6e", "#ffd23f", "#b47cff", "#ff9ad5", "#ffffff", "#ff8c42"];
+  for (let i = 0; i < 16; i++) {
+    const fx = .2 + (i % 4) * .2, fy = .2 + Math.floor(i / 4) * .2, base = up(P(c + fx, r + fy), 4), sw = Math.sin(t * 2 + i) * 1.1;
+    const tall = i % 5 === 2, h = tall ? 20 : 11 + (i % 3) * 2, top = { x: base.x + sw, y: base.y - h };
+    line(base, top, "#3d8f22", 1.8); ell(base.x - 3, base.y - 4, 3.5, 1.6, "#4f9a2c", -.5); ell(base.x + 3, base.y - 5, 3.5, 1.6, "#4f9a2c", .5);
+    if (tall) { for (let k = 0; k < 8; k++) { const a = k * .785 + t * .2; ell(top.x + Math.cos(a) * 4, top.y + Math.sin(a) * 4, 2.6, 1.5, "#ffc61a", a); } circ(top.x, top.y, 2.8, "#6b3a12"); }
+    else { const cl = cols[i % cols.length]; for (let k = 0; k < 5; k++) { const a = k * 1.256; circ(top.x + Math.cos(a) * 2.6, top.y + Math.sin(a) * 2.2, 2.2, cl); } circ(top.x, top.y, 1.5, "#ffe066"); }
+  }
+  const bp = up(P(c + .5, r + .5), 34);
+  for (let i = 0; i < 2; i++) { const a = t * (1.6 + i * .5) + i * 3, bx = bp.x + Math.cos(a) * 18, by = bp.y + Math.sin(a * 2) * 6; ell(bx, by, 3, 2.2, "#ffcc1a"); line({ x: bx - 1, y: by - 2 }, { x: bx - 1, y: by + 2 }, "#3a2a10", 1); ell(bx - 1, by - 3, 2.2, 1.4, "rgba(255,255,255,.8)"); }
+}
+ICON2.kazyumurtasi = (x, y, s) => { ell(x, y + s * .04, s * .26, s * .34, "#fbf6e8"); g.strokeStyle = "#d8ccb0"; g.lineWidth = s * .03; g.stroke(); ell(x - s * .08, y - s * .1, s * .07, s * .1, "rgba(255,255,255,.9)"); };
+ICON2.borek = (x, y, s) => {
+  ell(x, y + s * .18, s * .42, s * .14, "#e9e2d2");
+  for (let i = 0; i < 3; i++) { const yy = y + s * (.1 - i * .14); ell(x, yy, s * (.36 - i * .05), s * .12, i % 2 ? "#e8a948" : "#d98f2e"); g.strokeStyle = "#a8641a"; g.lineWidth = s * .02; g.stroke(); }
+  for (let i = 0; i < 5; i++) circ(x - s * .16 + i * s * .08, y - s * .2 + (i % 2) * s * .03, s * .018, "#3a2a1a");
+};
 
 // ================= Hızlandırma Merkezi: gübre, reklamla hızlandırma, bereket saati, kumbara, günün fırsatı, geri dönüş =================
 const HIZ_AD_MAX = 6, BER_SURE = 30 * 60000, BER_GEM = 25, GUB_PAKET = { n: 4, gem: 10 }, KUM_MAX = 150, KUM_MIN = 30;
